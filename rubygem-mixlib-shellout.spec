@@ -1,91 +1,60 @@
-# Generated from mixlib-shellout-1.0.0.gem by gem2rpm -*- rpm-spec -*-
-%global gem_name mixlib-shellout
-%global rubyabi 1.8.7
+# Generated from mixlib-shellout-1.1.0.gem by gem2rpm -*- rpm-spec -*-
+%define rbname mixlib-shellout
 
 Summary: Run external commands on Unix or Windows
-Name: rubygem-%{gem_name}
-Version: 1.0.0
-Release: 4%{?dist}
-Group: Development/Languages
-License: ASL 2.0
-URL: https://github.com/opscode/mixlib-shellout
-Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
-# See http://tickets.opscode.com/browse/CHEF-3168
-# Tests for this package are not in the gem. To update:
-# git clone https://github.com/opscode/mixlib-shellout.git && cd mixlib-shellout
-# git checkout 1.0.0
-# tar czvf rubygem-mixlib-shellout-1.0.0-specs.tgz spec/
-#Source1: rubygem-%{gem_name}-%{version}-specs.tgz
-# One test doesn't take into account that /bin is a symlink in fc17
-# See http://tickets.opscode.com/browse/CHEF-3107
-#Patch0: rubygem-mixlib-shellout-1.0.0-fix_test.patch
+Name: rubygem-%{rbname}
 
+Version: 1.1.0
+Release: 1
+Group: Development/Ruby
+License: Distributable
+URL: http://wiki.opscode.com/
+Source0: http://rubygems.org/gems/%{rbname}-%{version}.gem
+# Make sure the spec template is included in the SRPM
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Requires: ruby 
-Requires: ruby(abi) = %{rubyabi}
-Requires: ruby(rubygems) 
+Requires: rubygems 
 BuildRequires: ruby 
-BuildRequires: ruby(abi) = %{rubyabi}
-BuildRequires: rubygems-devel 
-BuildRequires: rubygem(rspec)
+BuildRequires: rubygems
 BuildArch: noarch
-Provides: rubygem(%{gem_name}) = %{version}
+Provides: ruby(Mixlib-shellout) = %{version}
+
+%define gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%define gembuilddir %{buildroot}%{gemdir}
 
 %description
 Run external commands on Unix or Windows
 
-%package doc
-Summary: Documentation for %{name}
-Group: Documentation
-Requires: %{name} = %{version}-%{release}
-BuildArch: noarch
-
-%description doc
-Documentation for %{name}
 
 %prep
-%setup -q -c -T
-mkdir -p .%{gem_dir}
-gem install --local --install-dir .%{gem_dir} \
-            --force %{SOURCE0}
+%setup -T -c
 
 %build
 
 %install
-mkdir -p %{buildroot}%{gem_dir}
-cp -a .%{gem_dir}/* \
-        %{buildroot}%{gem_dir}/
+%{__rm} -rf %{buildroot}
+mkdir -p %{gembuilddir}
+gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+%{__rm} -rf %{gembuilddir}/cache
 
-#%check
-#pushd .%{gem_instdir}
-#tar zxvf %{SOURCE1}
-#cat %{PATCH0} | patch -p2
-## One of the tests involves a fork && sleep 10 that may not finish before mock
-#rspec -Ilib && sleep 10
-#popd
+%clean
+%{__rm} -rf %{buildroot}
 
 %files
-%doc %{gem_instdir}/README.md
-%doc %{gem_instdir}/LICENSE
-%dir %{gem_instdir}
-%{gem_libdir}
-%exclude %{gem_cache}
-%{gem_spec}
-%exclude %{gem_instdir}/spec
+%defattr(-, root, root)
+%doc %{gemdir}/gems/mixlib-shellout-1.1.0/LICENSE
+%doc %{gemdir}/gems/mixlib-shellout-1.1.0/README.md
+%{gemdir}/gems/mixlib-shellout-1.1.0/lib/mixlib/shellout.rb
+%{gemdir}/gems/mixlib-shellout-1.1.0/lib/mixlib/shellout/windows/core_ext.rb
+%{gemdir}/gems/mixlib-shellout-1.1.0/lib/mixlib/shellout/exceptions.rb
+%{gemdir}/gems/mixlib-shellout-1.1.0/lib/mixlib/shellout/version.rb
+%{gemdir}/gems/mixlib-shellout-1.1.0/lib/mixlib/shellout/unix.rb
+%{gemdir}/gems/mixlib-shellout-1.1.0/lib/mixlib/shellout/windows.rb
 
-%files doc
-%doc %{gem_docdir}
+
+%doc %{gemdir}/doc/mixlib-shellout-1.1.0
+%{gemdir}/specifications/mixlib-shellout-1.1.0.gemspec
 
 %changelog
-* Tue Sep 11 2012 Sean P. Kane <spkane00@gmail.com> - 1.0.0-4
-- Backport from FC17 to RHEL 6 and Ruby 1.8.7
-
-* Sun Jun 17 2012 Jonas Courteau <rpms@courteau.org> - 1.0.0-3
-- move all test-related operations into check
-- excluding gem_cache
-
-* Sun Jun 3 2012 Jonas Courteau <rpms@courteau.org> - 1.0.0-2
-- exclude specs from final package
-- link to upstream bug reports for missing specs, broken test
-
-* Sat May 12 2012  Jonas Courteau <rpms@courteau.org> - 1.0.0-1
-- Initial package
+* Tue Sep 11 2012 Sergio Rubio <rubiojr@frameos.org> - 1.1.0-1
+- initial release
