@@ -5,7 +5,7 @@ Summary: Run external commands on Unix or Windows
 Name: rubygem-%{rbname}
 
 Version: 1.1.0
-Release: 1
+Release: 2
 Group: Development/Ruby
 License: Distributable
 URL: http://wiki.opscode.com/
@@ -17,7 +17,7 @@ Requires: rubygems
 BuildRequires: ruby 
 BuildRequires: rubygems
 BuildArch: noarch
-Provides: ruby(Mixlib-shellout) = %{version}
+Provides: rubygem(mixlib-shellout) = %{version}
 
 %define gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
 %define gembuilddir %{buildroot}%{gemdir}
