@@ -5,11 +5,12 @@ Summary: Run external commands on Unix or Windows
 Name: rubygem-%{rbname}
 
 Version: 1.1.0
-Release: 2
+Release: 4
 Group: Development/Ruby
 License: Distributable
 URL: http://wiki.opscode.com/
 Source0: http://rubygems.org/gems/%{rbname}-%{version}.gem
+Source1: %{rbname}-%{version}.gemspec
 # Make sure the spec template is included in the SRPM
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Requires: ruby 
@@ -36,6 +37,7 @@ Run external commands on Unix or Windows
 mkdir -p %{gembuilddir}
 gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
 %{__rm} -rf %{gembuilddir}/cache
+cp %{SOURCE1} %{buildroot}%{gemdir}/specifications/%{rbname}-%{version}.gemspec
 
 %clean
 %{__rm} -rf %{buildroot}
@@ -56,5 +58,8 @@ gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
 %{gemdir}/specifications/mixlib-shellout-1.1.0.gemspec
 
 %changelog
+* Tue Jan 08 2013 Sean P. Kane <spkane00@gmail.com> - 1.1.0-4
+- Include compatible gemspec
+
 * Tue Sep 11 2012 Sergio Rubio <rubiojr@frameos.org> - 1.1.0-1
 - initial release
