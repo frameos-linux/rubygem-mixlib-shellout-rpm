@@ -5,7 +5,7 @@ Summary: Run external commands on Unix or Windows
 Name: rubygem-%{rbname}
 
 Version: 1.1.0
-Release: 4
+Release: 5
 Group: Development/Ruby
 License: Distributable
 URL: http://wiki.opscode.com/
@@ -37,6 +37,7 @@ Run external commands on Unix or Windows
 mkdir -p %{gembuilddir}
 gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
 %{__rm} -rf %{gembuilddir}/cache
+rm -f %{buildroot}%{gemdir}/specifications/%{rbname}-%{version}.gemspec
 cp %{SOURCE1} %{buildroot}%{gemdir}/specifications/%{rbname}-%{version}.gemspec
 
 %clean
@@ -55,7 +56,7 @@ cp %{SOURCE1} %{buildroot}%{gemdir}/specifications/%{rbname}-%{version}.gemspec
 
 
 %doc %{gemdir}/doc/mixlib-shellout-1.1.0
-%{gemdir}/specifications/mixlib-shellout-1.1.0.gemspec
+%{gemdir}/specifications/%{rbname}-%{version}.gemspec
 
 %changelog
 * Tue Jan 08 2013 Sean P. Kane <spkane00@gmail.com> - 1.1.0-4
